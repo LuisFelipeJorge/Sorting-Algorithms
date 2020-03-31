@@ -12,9 +12,9 @@ long int getMax(long int n, long int a[]);//this function returns the maximum va
 void countingSort(long int n, long int a[], int exp); // This function contains a stable sorting algorithm that will assist in the implementation of the radix sort.
 void radixSort(long int n, long int a[]); // function that contains the sorting algorithm
 
- //////////////////////////////////////////////////
+//////////////////////////////////////////////////
 
- int main(int argc, char const *argv[]) {
+int main(int argc, char const *argv[]) {
    int k; // represents the power of 10, and this will be the size of the array
    long int n;// n --> the size of the array
    clock_t start,end; // variables to measure the time passed to sort the array
@@ -49,43 +49,43 @@ void radixSort(long int n, long int a[]); // function that contains the sorting 
 
    getchar();
    return 0;
- }
+}
 
- //////////////////////////////////////////////////
+//////////////////////////////////////////////////
 
- void random_array(long int n, long int a[]){
-   // n is the number of elements of the array
-   srand(time(NULL));
-   long int i;
-   for (i = 0; i < n; i++) { // loop to fill the array
-     a[i] = rand() % n;
-     //this generates a set of random numbers in the range 0 to n
-   }
- }
+void random_array(long int n, long int a[]){
+  // n is the number of elements of the array
+  srand(time(NULL));
+  long int i;
+  for (i = 0; i < n; i++) { // loop to fill the array
+    a[i] = rand() % n;
+    //this generates a set of random numbers in the range 0 to n
+  }
+}
 
- //////////////////////////////////////////////////
+//////////////////////////////////////////////////
 
- void print_array(long int n, long int a[]){
-   printf("Printing the array : \n" );
-   long int i;
-   int count = 0; // to count the number of columns in each row
-   for ( i = 0; i < n; i++) {
-     printf("a[%ld] = %ld ",i,a[i] );
-     count += 1;
-     if (count == 10){ // print the array in 10 columns
-       printf("\n"); // new row
-       count = 0; // return to count
-     }
-   }
- }
+void print_array(long int n, long int a[]){
+  printf("Printing the array : \n" );
+  long int i;
+  int count = 0; // to count the number of columns in each row
+  for ( i = 0; i < n; i++) {
+    printf("a[%ld] = %ld ",i,a[i] );
+    count += 1;
+    if (count == 10){ // print the array in 10 columns
+      printf("\n"); // new row
+      count = 0; // return to count
+    }
+  }
+}
 
- //////////////////////////////////////////////////
+//////////////////////////////////////////////////
 
- long int key(long int x, int exp){
-   return ((x/exp)%10); // the rest of the division by 10 raised to exp .
- }
+long int key(long int x, int exp){
+  return ((x/exp)%10); // the rest of the division by 10 raised to exp .
+}
 
- //////////////////////////////////////////////////
+//////////////////////////////////////////////////
 
 long int getMax(long int n, long int a[]){
   long int max = a[0];
@@ -98,58 +98,58 @@ long int getMax(long int n, long int a[]){
   return max;
 }
 
- //////////////////////////////////////////////////
+//////////////////////////////////////////////////
 
- void countingSort(long int n, long int a[], int exp){
-   long int i; // will auxiliate to make the loops
-   int k = 10; // k -> represents the number of keys, as we are working with decimal numbers, we will work with 10 different types of keys {0 ... 9}
-   long int count[k];
-   // at this moment, the 'count' array will store in each index the number of elements of each key
-   // as instance, count [0] will store the number of elements that have the key value equal to zero.
-   for ( i = 0; i < k; i++) {
-       count[i] = 0; //initializing the matrix with 0, to ensure that the algorithm does not access unwanted values
-   }
+void countingSort(long int n, long int a[], int exp){
+  long int i; // will auxiliate to make the loops
+  int k = 10; // k -> represents the number of keys, as we are working with decimal numbers, we will work with 10 different types of keys {0 ... 9}
+  long int count[k];
+  // at this moment, the 'count' array will store in each index the number of elements of each key
+  // as instance, count [0] will store the number of elements that have the key value equal to zero.
+  for ( i = 0; i < k; i++) {
+      count[i] = 0; //initializing the matrix with 0, to ensure that the algorithm does not access unwanted values
+  }
 
-   for ( i = 0; i < n; i++) {
-     count[key(a[i],exp)] += 1;
-     // storing the number of elements of each key values
-     // example:
-     // a[i] = 101 --> key(101,1) = 1 --> count[1] += 1
+  for ( i = 0; i < n; i++) {
+    count[key(a[i],exp)] += 1;
+    // storing the number of elements of each key values
+    // example:
+    // a[i] = 101 --> key(101,1) = 1 --> count[1] += 1
+  }
+
+  long int total = 0; //total is the range of elements for each type of key
+  long int aux; // variable to auxiliate doing the swap
+  for (i = 0; i < k; i++) {
+    aux = count[i];
+    count[i] = total;
+    total += aux; // in each iteration, 'total' will store the index where the algorithm will start placing the values ​​for each key
+  }
+  // elements of key value zero starts at the index 0
+  // elements of key value 1 starts at the index (0 + number of elements 0) and so on
+  // count now contains the index of the position in which each type will be stored
+
+  //auxiliar vector to help the sort process
+
+  long int *b =(long int *)malloc(n*sizeof(long int));
+  if (b == NULL) {
+    printf("Memory could not be allocated" );
+    exit(EXIT_FAILURE); // in this case, we have a problem in the process of allocating memory for the array
+  }else{
+    for ( i = 0; i < n; i++) {
+      b[count[key(a[i],exp)]] = a[i];
+      count[key(a[i],exp)] ++;
+      // b receives the elements already placed according to their index
     }
 
-    long int total = 0; //total is the range of elements for each type of key
-    long int aux; // variable to auxiliate doing the swap
-    for (i = 0; i < k; i++) {
-      aux = count[i];
-      count[i] = total;
-      total += aux; // in each iteration, 'total' will store the index where the algorithm will start placing the values ​​for each key
-    }
-    // elements of key value zero starts at the index 0
-    // elements of key value 1 starts at the index (0 + number of elements 0) and so on
-    // count now contains the index of the position in which each type will be stored
-
-    //auxiliar vector to help the sort process
-
-    long int *b =(long int *)malloc(n*sizeof(long int));
-    if (b == NULL) {
-      printf("Memory could not be allocated" );
-      exit(EXIT_FAILURE); // in this case, we have a problem in the process of allocating memory for the array
-    }else{
-      for ( i = 0; i < n; i++) {
-        b[count[key(a[i],exp)]] = a[i];
-        count[key(a[i],exp)] ++;
-        // b receives the elements already placed according to their index
+    //overwriting b in a
+    for (i =0 ; i < n; ++i){
+      a[i]=b[i];
       }
+    free(b);
+  }
+}
 
-      //overwriting b in a
-      for (i =0 ; i < n; ++i){
-        a[i]=b[i];
-        }
-      free(b);
-    }
- }
-
- //////////////////////////////////////////////////
+//////////////////////////////////////////////////
 
 void radixSort(long int n, long int a[]){
   // Find the maximum number to know number of digits
