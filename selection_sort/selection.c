@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "insertion.h"
+#include "selection.h"
 
 void swap(int *a, int *b)
 {
@@ -38,28 +38,27 @@ void read_values(int *arr, int size)
   }  
 }
 
-void insertion_sort(int *arr, int size, long int *comparisons, long int *exchanges)
+
+void selection_sort(int *arr, int size, long int *comparisons, long int *exchanges)
 {
-  int x; 
-  int i,j; 
-  for ( i = 1; i < size; i++) 
+  int i, j;
+  int lower_value_idx;
+
+  for ( i = 0; i < size; i++)
   {
-    x = arr[i]; 
-    *exchanges += 1;
-    j = i - 1;
-    while (j >= 0 && arr[j] > x) 
-    {
+    lower_value_idx = i;
+    for ( j = i + 1; j < size; j++)
+    { 
       *comparisons += 1;
-      arr[j+1] = arr[j];
-      *exchanges += 1;
-      j--;
+      if (arr[j] < arr[lower_value_idx])
+      {
+        lower_value_idx = j;
+      }      
     }
-    if (j>=0)
+    if (arr[i] != arr[lower_value_idx])
     {
-      *comparisons += 1;
-    }
-    
-    arr[j+1] = x;
-    *exchanges += 1;
-  } 
+      *exchanges += 3;  
+      swap(&arr[i], &arr[lower_value_idx]);
+    }    
+  }  
 }
