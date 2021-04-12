@@ -1,6 +1,16 @@
-void swap(long int *a, long int *b);
-void print_array(long int *arr, long int size);
-void read_values(long int* arr, long int size);
-void random_array(long int size, long int *arr);
-void merge_sort_R(long int *arr, long int start, long int end, long int *comparisons, long int *exchanges);
-void merge(long int *arr, long int start1, long int end1, long int start2, long int end2, long int *comparisons, long int *exchanges);
+void swapValues(long int *value1, long int *value2);
+void createRandomArray(long int array[], long int arraySize);
+void printArray(long int array[], long int arraySize);
+void readArrayValues(long int array[], long int arraySize);
+void mergeSortRecursive(long int array[],
+  long int startIndex, 
+  long int endIndex, 
+  long int *numberOfComparisons, 
+  long int *numberOfExchanges);
+void merge(long int array[], 
+  long int leftStartIndex, 
+  long int leftEndIndex, 
+  long int rightStartIndex, 
+  long int rightEndIndex, 
+  long int *numberOfComparisons, 
+  long int *numberOfExchanges);

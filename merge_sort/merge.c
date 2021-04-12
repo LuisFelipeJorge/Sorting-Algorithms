@@ -1,90 +1,102 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <time.h>
+#include <assert.h>
 
 #include "merge.h"
 
-void swap(long int *a, long int *b)
+void swapValues(long int *value1, long int *value2)
 {
   long int aux;
-  aux = *a,
-  *a = *b;
-  *b = aux;
+  aux = *value1,
+  *value1 = *value2;
+  *value2 = aux;
 }
 
-void print_array(long int *arr, long int size)
+void createRandomArray(long int array[], long int arraySize)
 {
-  for (long int i = 0; i < size; i++)
+  srand(time(NULL));
+  long int arrayIndex;
+  for (arrayIndex = 0; arrayIndex < arraySize; arrayIndex++) { 
+    array[arrayIndex] = rand() % arraySize;
+  }
+}
+
+void printArray(long int array[], long int arraySize)
+{
+  for (long int arrayIndex = 0; arrayIndex < arraySize; arrayIndex++)
   {
-    printf("%ld ", arr[i]);
+    printf("%ld ", array[arrayIndex]);
   }
   printf("\n");
 }
 
-void random_array(long int size, long int *arr)
+void readArrayValues(long int array[], long int arraySize)
 {
-  srand(time(NULL));
-  long int i;
-  for (i = 0; i < size; i++) { 
-    arr[i] = rand() % size;
-  }
-}
-
-void read_values(long int *arr, long int size)
-{
-  for (long int i = 0; i < size; i++)
+  for (long int arrayIndex = 0; arrayIndex < arraySize; arrayIndex++)
   {
-    scanf("%ld", arr+i);
+    scanf("%ld", &array[arrayIndex]);
   }  
 }
 
-void merge_sort_R(long int *arr, long int start, long int end, long int *comparisons, long int *exchanges)
+void copyArray(long int destination[], long int source[], long int startIndex, long int endIndex) {
+  for (long int destinationIndex = startIndex, sourceIndex=0; destinationIndex <= endIndex; destinationIndex++, sourceIndex++)
+    destination[destinationIndex] = source[sourceIndex];  
+}
+
+void mergeSortRecursive(long int array[],
+  long int startIndex, 
+  long int endIndex, 
+  long int *numberOfComparisons, 
+  long int *numberOfExchanges)
 {
-  if(end > start)
+  if(endIndex > startIndex)
   {
-    long int midle = (start + end)/2;
-    merge_sort_R(arr, start, midle, comparisons, exchanges);
-    merge_sort_R(arr, midle+1, end, comparisons, exchanges);
-    merge(arr, start, midle, midle + 1, end, comparisons, exchanges);
+    long int midle = (startIndex + endIndex)/2;
+    mergeSortRecursive(array, startIndex, midle, numberOfComparisons, numberOfExchanges);
+    mergeSortRecursive(array, midle+1, endIndex, numberOfComparisons, numberOfExchanges);
+    merge(array, startIndex, midle, midle + 1, endIndex, numberOfComparisons, numberOfExchanges);
   }
 }
 
-void merge(long int *arr, long int start1, long int end1, long int start2, long int end2, long int *comparisons, long int *exchanges)
+void merge(long int array[], 
+  long int leftStartIndex, 
+  long int leftEndIndex, 
+  long int rightStartIndex, 
+  long int rightEndIndex, 
+  long int *numberOfComparisons, 
+  long int *numberOfExchanges)
 {
-  int len = (end1 - start1 + 1) + (end2 - start2 +1);
-  int *copy = (int*)malloc(sizeof(int)*len);
-  assert(copy != NULL);
-  int idx1 = start1;
-  int idx2 = start2;
-  int k = 0;
-  while (idx1 <=end1 && idx2 <= end2)
+  long int subArraySize = (leftEndIndex - leftStartIndex + 1) + (rightEndIndex - rightStartIndex +1);
+  long int *arrayCopy = (long int*)malloc(sizeof(long int)*subArraySize);
+  assert(arrayCopy != NULL);
+  long int idx1 = leftStartIndex;
+  long int idx2 = rightStartIndex;
+  long int copyIndex = 0;
+  while (idx1 <=leftEndIndex && idx2 <= rightEndIndex)
   {
-    *comparisons += 1;
-    if (arr[idx1] <= arr[idx2])
+    numberOfComparisons += 1;
+    if (array[idx1] <= array[idx2])
     {
-      *exchanges += 1;
-      copy[k++]=arr[idx1++];
+      *numberOfExchanges += 1;
+      arrayCopy[copyIndex++]=array[idx1++];
     }else
     {
-      *exchanges += 1;
-      copy[k++]=arr[idx2++];
+      *numberOfExchanges += 1;
+      arrayCopy[copyIndex++]=array[idx2++];
     }   
   }
-  while (idx1 <= end1)
+  while (idx1 <= leftEndIndex)
   {
-    *exchanges += 1;
-    copy[k++]=arr[idx1++];
+    *numberOfExchanges += 1;
+    arrayCopy[copyIndex++]=array[idx1++];
   }        
-  while (idx2 <= end2)
+  while (idx2 <= rightEndIndex)
   {
-    *exchanges += 1;
-    copy[k++]=arr[idx2++];
+    *numberOfExchanges += 1;
+    arrayCopy[copyIndex++]=array[idx2++];
   }     
-  for (int i = start1, k = 0; i <= end2; i++, k++)
-  {
-    *exchanges += 1;
-    arr[i] = copy[k];
-  }
-  free(copy);
+
+  copyArray(array, arrayCopy,leftStartIndex , rightEndIndex);
+  free(arrayCopy);
 }

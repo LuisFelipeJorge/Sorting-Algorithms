@@ -4,62 +4,58 @@
 
 #include "insertion.h"
 
-void swap(int *a, int *b)
+void swapValues(int *value1, int *value2)
 {
   int aux;
-  aux = *a,
-  *a = *b;
-  *b = aux;
+  aux = *value1,
+  *value1 = *value2;
+  *value2 = aux;
 }
 
-void random_array(int size, int *arr)
+void createRandomArray(int array[], int arraySize)
 {
   srand(time(NULL));
-  int i;
-  for (i = 0; i < size; i++) { 
-    arr[i] = rand() % size;
+  int arrayIndex;
+  for (arrayIndex = 0; arrayIndex < arraySize; arrayIndex++) { 
+    array[arrayIndex] = rand() % arraySize;
   }
 }
 
-void print_array(int *arr, int size)
+void printArray(int array[], int arraySize)
 {
-  for (int i = 0; i < size; i++)
+  for (int arrayIndex = 0; arrayIndex < arraySize; arrayIndex++)
   {
-    printf("%d ", arr[i]);
+    printf("%d ", array[arrayIndex]);
   }
   printf("\n");
 }
 
-void read_values(int *arr, int size)
+void readArrayValues(int array[], int arraySize)
 {
-  for (int i = 0; i < size; i++)
+  for (int arrayIndex = 0; arrayIndex < arraySize; arrayIndex++)
   {
-    scanf("%d", arr+i);
+    scanf("%d", &array[arrayIndex]);
   }  
 }
 
-void insertion_sort(int *arr, int size, long int *comparisons, long int *exchanges)
+void insertionSort(int array[], int arraySize, long int *numberOfComparisons, long int *numberOfExchanges)
 {
-  int x; 
-  int i,j; 
-  for ( i = 1; i < size; i++) 
+  int insertionElement; 
+  for (int arrayIndex = 1; arrayIndex < arraySize; arrayIndex++) 
   {
-    x = arr[i]; 
-    *exchanges += 1;
-    j = i - 1;
-    while (j >= 0 && arr[j] > x) 
+    insertionElement = array[arrayIndex]; 
+    *numberOfExchanges += 1;
+    int insertionIndex = arrayIndex - 1;
+    while (insertionIndex >= 0 && array[insertionIndex] > insertionElement) 
     {
-      *comparisons += 1;
-      arr[j+1] = arr[j];
-      *exchanges += 1;
-      j--;
+      *numberOfComparisons += 1;
+      *numberOfExchanges += 1;
+      array[insertionIndex+1] = array[insertionIndex];
+      insertionIndex--;
     }
-    if (j>=0)
-    {
-      *comparisons += 1;
-    }
+    if (insertionIndex >= 0) { *numberOfComparisons += 1; }
     
-    arr[j+1] = x;
-    *exchanges += 1;
+    array[insertionIndex + 1] = insertionElement;
+    *numberOfExchanges += 1;
   } 
 }

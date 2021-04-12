@@ -1,113 +1,112 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <time.h>
 
 #include "heap.h"
 
-void swap(long int *a, long int *b)
+void swapValues(long int *value1, long int *value2)
 {
   long int aux;
-  aux = *a,
-  *a = *b;
-  *b = aux;
+  aux = *value1,
+  *value1 = *value2;
+  *value2 = aux;
 }
 
-void print_array(long int *arr, long int size)
+void createRandomArray(long int array[], long int arraySize)
 {
-  for (long int i = 0; i < size; i++)
+  srand(time(NULL));
+  long int arrayIndex;
+  for (arrayIndex = 0; arrayIndex < arraySize; arrayIndex++) { 
+    array[arrayIndex] = rand() % arraySize;
+  }
+}
+
+void printArray(long int array[], long int arraySize)
+{
+  for (long int arrayIndex = 0; arrayIndex < arraySize; arrayIndex++)
   {
-    printf("%ld ", arr[i]);
+    printf("%ld ", array[arrayIndex]);
   }
   printf("\n");
 }
 
-void random_array(long int size, long int *arr)
+void readArrayValues(long int array[], long int arraySize)
 {
-  srand(time(NULL));
-  long int i;
-  for (i = 0; i < size; i++) { 
-    arr[i] = rand() % size;
-  }
-}
-
-void read_values(long int *arr, long int size)
-{
-  for (long int i = 0; i < size; i++)
+  for (long int arrayIndex = 0; arrayIndex < arraySize; arrayIndex++)
   {
-    scanf("%ld", arr+i);
+    scanf("%ld", &array[arrayIndex]);
   }  
 }
 
-void heapfy_recursive(long int *arr, long int parent, long int end, long int *comparisons, long int *exchanges)
+void RecursiveHeapfy(long int *array, long int parentIndex, long int arrayEndIndex, long int *numberOfComparisons, long int *numberOfExchanges)
 {
-  long int child = 2*parent+1;
-  if ( child <= end)
+  long int childIndex = 2*parentIndex+1;
+  if ( childIndex <= arrayEndIndex)
   {
-    if (child + 1 <= end)
-    {// has 2 children
-      *comparisons += 1;
-      if (arr[child+1] > arr[child]) child++; 
-    }
-    if (arr[child] > arr[parent])
+    if (childIndex + 1 <= arrayEndIndex)
     {
-      *exchanges += 3;
-      swap(&arr[parent], &arr[child]);
-      heapfy_recursive(arr, child, end, comparisons, exchanges);
+      *numberOfComparisons += 1;
+      if (array[childIndex+1] > array[childIndex]) childIndex++; 
+    }
+    if (array[childIndex] > array[parentIndex])
+    {
+      *numberOfExchanges += 3;
+      swapValues(&array[parentIndex], &array[childIndex]);
+      RecursiveHeapfy(array, childIndex, arrayEndIndex, numberOfComparisons, numberOfExchanges);
     }       
   }  
 }
 
-void heapfy_iterative(long int *arr, long int parent, long int end, long int *comparisons, long int *exchanges)
+void IterariveHeapfy(long int *array, long int parentIndex, long int arrayEndIndex, long int *numberOfComparisons, long int *numberOfExchanges)
 {
-  while (parent <= end)
+  while (parentIndex <= arrayEndIndex)
   {
-    long int child = 2*parent+1;
-    if ( child <= end)
+    long int child = 2*parentIndex+1;
+    if ( child <= arrayEndIndex)
     {
-      if (child + 1 <= end)
-      {// has 2 children
-        *comparisons += 1;
-        if (arr[child+1] > arr[child]) child++; 
-      }
-      if (arr[child] > arr[parent])
+      if (child + 1 <= arrayEndIndex)
       {
-        *exchanges += 3;
-        swap(&arr[parent], &arr[child]);
-        parent = child;
+        *numberOfComparisons += 1;
+        if (array[child+1] > array[child]) child++; 
+      }
+      if (array[child] > array[parentIndex])
+      {
+        *numberOfExchanges += 3;
+        swapValues(&array[parentIndex], &array[child]);
+        parentIndex = child;
       }       
     }
-    parent = child;      
+    parentIndex = child;      
   }
 }
 
 
-void heap_sort_r(long int *arr, long int size, long int *comparisons, long int *exchanges)
+void heapSortRecursive(long int *array, long int arraySize, long int *numberOfComparisons, long int *numberOfExchanges)
 {
-  long int i;
-  for ( i = size/2; i >= 0; i--)
+  long int arrayIndex;
+  for ( arrayIndex = arraySize/2; arrayIndex >= 0; arrayIndex--)
   {
-    heapfy_recursive(arr, i, size-1, comparisons, exchanges);
+    RecursiveHeapfy(array, arrayIndex, arraySize-1, numberOfComparisons, numberOfExchanges);
   }
-  for ( i = size-1; i > 0; i--)
+  for ( arrayIndex = arraySize-1; arrayIndex > 0; arrayIndex--)
   {
-    *exchanges += 3;
-    swap(&arr[0], &arr[i]);
-    heapfy_recursive(arr, 0, i-1, comparisons, exchanges);  
+    *numberOfExchanges += 3;
+    swapValues(&array[0], &array[arrayIndex]);
+    RecursiveHeapfy(array, 0, arrayIndex-1, numberOfComparisons, numberOfExchanges);  
   }
 }
 
-void heap_sort_i(long int *arr, long int size, long int *comparisons, long int *exchanges)
+void heapSortIterative(long int *array, long int arraySize, long int *numberOfComparisons, long int *numberOfExchanges)
 {
-  long int i;
-  for ( i = size/2; i >= 0; i--)
+  long int arrayIndex;
+  for ( arrayIndex = arraySize/2; arrayIndex >= 0; arrayIndex--)
   {
-    heapfy_iterative(arr, i, size-1, comparisons, exchanges);
+    IterariveHeapfy(array, arrayIndex, arraySize-1, numberOfComparisons, numberOfExchanges);
   }
-  for ( i = size-1; i > 0; i--)
+  for ( arrayIndex = arraySize-1; arrayIndex > 0; arrayIndex--)
   {
-    *exchanges += 3;
-    swap(&arr[0], &arr[i]);
-    heapfy_iterative(arr, 0, i-1, comparisons, exchanges);  
+    *numberOfExchanges += 3;
+    swapValues(&array[0], &array[arrayIndex]);
+    IterariveHeapfy(array, 0, arrayIndex-1, numberOfComparisons, numberOfExchanges);  
   }
 }

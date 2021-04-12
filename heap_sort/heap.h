@@ -1,8 +1,6 @@
-void swap(long int *a, long int *b);
-void print_array(long int *arr, long int size);
-void read_values(long int* arr, long int size);
-void random_array(long int size, long int *arr);
-void heapfy_recursive(long int *arr, long int parent, long int end, long int *comparisons, long int *exchanges);
-void heapfy_iterative(long int *arr, long int parent, long int end, long int *comparisons, long int *exchanges);
-void heap_sort_r(long int *arr, long int size, long int *comparisons, long int *exchanges);
-void heap_sort_i(long int *arr, long int size, long int *comparisons, long int *exchanges);
+void swapValues(long int *value1, long int *value2);
+void createRandomArray(long int array[], long int arraySize);
+void printArray(long int array[], long int arraySize);
+void readArrayValues(long int array[], long int arraySize);
+void heapSortRecursive(long int *array, long int arraySize, long int *numberOfComparisons, long int *numberOfExchanges);
+void heapSortIterative(long int *array, long int arraySize, long int *numberOfComparisons, long int *numberOfExchanges);

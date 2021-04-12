@@ -6,55 +6,52 @@
 #include "bubble.h"
 
 int main(int argc, char const *argv[]) {
-  int k; // the input will be of size 10 raised to the power k 
-  int size; 
-  long int comparisons, exchanges;
+  int power, arraySize; 
+  long int numberOfComparisons, numberOfExchanges;
+  clock_t startTime, endTime;
+  double timePassed;
 
-
-  clock_t start,end;
-  double time_passed;
-
-  for (k = 2; k <= 5; k++) 
+  for (power = 2; power <= 5; power++) 
   { 
-    size = 1;
-    int i = k;
-    while (i > 0) 
+    arraySize = 1;
+    int iterator = power;
+    while (iterator > 0) 
     {
-      size = 10*size;
-      i--;
+      arraySize = 10*arraySize;
+      iterator--;
     }
 
-    int *a = (int *) malloc(size*sizeof(int));
-    assert(a != NULL);
-    printf("K = %d\n", k);
+    int *array = (int *) malloc(arraySize*sizeof(int));
+    assert(array != NULL);
+    printf("Power = %d\n", power);
 
-    random_array(size, a);
-    printf("------------------BUBBLE SORT-------------\n");
-    comparisons = 0;
-    exchanges = 0;
-    start = clock();
-    bubble_sort(a, size, &comparisons, &exchanges);
-    end = clock();
-    time_passed = (double)(end - start)/CLOCKS_PER_SEC;
-    printf("Number of exchanges : %ld\n", exchanges);
-    printf("Number of comparisons : %ld\n",comparisons);
-    printf("Total number of operations : %ld\n", (comparisons+exchanges));
-    printf("Time passed for sorting (miliseconds): %f\n", time_passed);
+    createRandomArray(array, arraySize);
+    printf("-----------------BUBBLE SORT-------------\n");
+    numberOfComparisons = 0;
+    numberOfExchanges = 0;
+    startTime = clock();
+    bubbleSort(array, arraySize, &numberOfComparisons, &numberOfExchanges);
+    endTime = clock();
+    timePassed = (double)(endTime - startTime)/CLOCKS_PER_SEC;
+    printf("Number of Exchanges : %ld\n", numberOfExchanges);
+    printf("Number of Comparisons : %ld\n",numberOfComparisons);
+    printf("Total number of operations : %ld\n", (numberOfComparisons+numberOfExchanges));
+    printf("Time passed for sorting (miliseconds): %f\n", timePassed);
 
-    random_array(size, a);
+    createRandomArray(array, arraySize);
     printf("------------------OPTIMIZED BUBBLE SORT-------------\n");
-    comparisons = 0;
-    exchanges = 0;
-    start = clock();
-    bubble_sort_Op(a, size, &comparisons, &exchanges);
-    end = clock();
-    time_passed = (double)(end - start)/CLOCKS_PER_SEC;
-    printf("Number of exchanges : %ld\n", exchanges);
-    printf("Number of comparisons : %ld\n",comparisons);
-    printf("Total number of operations : %ld\n", (comparisons+exchanges));
-    printf("Time passed for sorting (miliseconds): %f\n", time_passed);
+    numberOfComparisons = 0;
+    numberOfExchanges = 0;
+    startTime = clock();
+    bubbleSortOptimized(array, arraySize, &numberOfComparisons, &numberOfExchanges);
+    endTime = clock();
+    timePassed = (double)(endTime - startTime)/CLOCKS_PER_SEC;
+    printf("Number of Exchanges : %ld\n", numberOfExchanges);
+    printf("Number of Comparisons : %ld\n",numberOfComparisons);
+    printf("Total number of operations : %ld\n", (numberOfComparisons+numberOfExchanges));
+    printf("Time passed for sorting (miliseconds): %f\n", timePassed);
     
-    free(a);// release the memory
+    free(array);
   }
   return 0;
 }

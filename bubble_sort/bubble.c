@@ -4,79 +4,75 @@
 
 #include "bubble.h"
 
-void swap(int *a, int *b)
+
+void swapValues(int *value1, int *value2)
 {
   int aux;
-  aux = *a,
-  *a = *b;
-  *b = aux;
+  aux = *value1,
+  *value1 = *value2;
+  *value2 = aux;
 }
 
-void random_array(int size, int *arr)
+void createRandomArray(int array[], int arraySize)
 {
   srand(time(NULL));
-  int i;
-  for (i = 0; i < size; i++) { 
-    arr[i] = rand() % size;
+  int arrayIndex;
+  for (arrayIndex = 0; arrayIndex < arraySize; arrayIndex++) { 
+    array[arrayIndex] = rand() % arraySize;
   }
 }
 
-void print_array(int *arr, int size)
+void printArray(int array[], int arraySize)
 {
-  for (int i = 0; i < size; i++)
+  for (int arrayIndex = 0; arrayIndex < arraySize; arrayIndex++)
   {
-    printf("%d ", arr[i]);
+    printf("%d ", array[arrayIndex]);
   }
   printf("\n");
 }
 
-void read_values(int *arr, int size)
+void readArrayValues(int array[], int arraySize)
 {
-  for (int i = 0; i < size; i++)
+  for (int arrayIndex = 0; arrayIndex < arraySize; arrayIndex++)
   {
-    scanf("%d", arr+i);
+    scanf("%d", &array[arrayIndex]);
   }  
 }
 
-
-void bubble_sort(int *arr, int size, long int *comparisons, long int *exchanges)
+void bubbleSort(int array[], int arraySize, long int *numberOfComparisons, long int *numberOfExchanges)
 {
-  int i,j;
-
-  for (i = size-1; i > 0; i--) 
+  for (int arrayIndex = arraySize-1; arrayIndex > 0; arrayIndex--) 
   {
-    for ( j = 0; j < size; j++) 
+    for (int bubbleIndex = 0; bubbleIndex < arraySize; bubbleIndex++) 
     {
-      *comparisons += 1;
-      if (arr[j] > arr[j+1])
+      *numberOfComparisons += 1;
+      if (array[bubbleIndex] > array[bubbleIndex+1])
       { 
-        *exchanges += 3;
-        swap(&arr[j], &arr[j+1]);
+        *numberOfExchanges += 3;
+        swapValues(&array[bubbleIndex], &array[bubbleIndex+1]);
       }
     }
   }
 }
 
-
-void bubble_sort_Op(int* arr, int size, long int *comparisons, long int *exchanges)
+void bubbleSortOptimized(int array[], int arraySize, long int *numberOfComparisons, long int *numberOfExchanges)
 {
-  int i,j;
-  int last_swap;
+  int lastSortedPositionIndex, lastSwapIndex;
 
-  j = size - 1;
-  while (j > 0)
+  lastSortedPositionIndex = arraySize - 1;
+  while (lastSortedPositionIndex > 0)
   {
-    last_swap = -1;
-    for ( i = 0; i < j; i++)
+    lastSwapIndex = -1;
+    for (int arrayIndex = 0; arrayIndex < lastSortedPositionIndex; arrayIndex++)
     { 
-      *comparisons += 1;
-      if (arr[i] > arr[i+1])
+      *numberOfComparisons += 1;
+      if (array[arrayIndex] > array[arrayIndex+1])
       {
-        swap(&arr[i], &arr[i+1]);
-        *exchanges += 3;
-        last_swap = i;
+        swapValues(&array[arrayIndex], &array[arrayIndex+1]);
+        *numberOfExchanges += 3;
+        lastSwapIndex = arrayIndex;
       }    
     }   
-    j = last_swap;
+    lastSortedPositionIndex = lastSwapIndex;
   }
 }

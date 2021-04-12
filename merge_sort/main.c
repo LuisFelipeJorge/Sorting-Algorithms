@@ -7,42 +7,39 @@
 
 int main(int argc, char const *argv[])
 {
-  int k; // the input will be of size 10 raised to the power k 
-  long int size; 
-  long int comparisons, exchanges;
+  int power; 
+  long int arraySize, numberOfComparisons, numberOfExchanges;
+  clock_t startTime, endTime;
+  double timePassed;
 
-
-  clock_t start,end;
-  double time_passed;
-
-  for (k = 2; k <= 8; k++) 
+  for (power = 2; power <= 8; power++) 
   { 
-    size = 1;
-    int i = k;
-    while (i > 0) 
+    arraySize = 1;
+    int iterator = power;
+    while (iterator > 0) 
     {
-      size = 10*size;
-      i--;
+      arraySize = 10*arraySize;
+      iterator--;
     }
 
-    long int *a = (long int *) malloc(size*sizeof(long int));
-    assert(a != NULL);
-    printf("K = %d\n", k);
+    long int *array = (long int *) malloc(arraySize*sizeof(long int));
+    assert(array != NULL);
+    printf("Power = %d\n", power);
 
-    random_array(size, a);
+    createRandomArray(array, arraySize);
     printf("------------------RECURSIVE MERGE SORT-------------\n");
-    comparisons = 0;
-    exchanges = 0;
-    start = clock();
-    merge_sort_R(a, 0, size-1, &comparisons, &exchanges);
-    end = clock();
-    time_passed = (double)(end - start)/CLOCKS_PER_SEC;
-    printf("Number of exchanges : %ld\n", exchanges);
-    printf("Number of comparisons : %ld\n",comparisons);
-    printf("Total number of operations : %ld\n", (comparisons+exchanges));
-    printf("Time passed for sorting (miliseconds): %f\n", time_passed);
+    numberOfComparisons = 0;
+    numberOfExchanges = 0;
+    startTime = clock();
+    mergeSortRecursive(array, 0, arraySize-1, &numberOfComparisons, &numberOfExchanges);
+    endTime = clock();
+    timePassed = (double)(endTime - startTime)/CLOCKS_PER_SEC;
+    printf("Number of exchanges : %ld\n", numberOfExchanges);
+    printf("Number of comparisons : %ld\n",numberOfComparisons);
+    printf("Total number of operations : %ld\n", (numberOfComparisons+numberOfExchanges));
+    printf("Time passed for sorting (miliseconds): %f\n", timePassed);
     
-    free(a);// release the memory
+    free(array);// release the memory
   }
   return 0;
 }

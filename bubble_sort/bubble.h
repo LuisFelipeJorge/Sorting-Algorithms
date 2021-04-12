@@ -1,6 +1,6 @@
-void swap(int *a, int *b);
-void random_array(int size, int *arr);
-void print_array(int *arr, int size);
-void read_values(int *arr, int size);
-void bubble_sort(int *arr, int size, long int *comparisons, long int *exchanges);
-void bubble_sort_Op(int* arr, int size, long int *comparisons, long int *exchanges);
+void swapValues(int *value1, int *value2);
+void createRandomArray(int array[], int arraySize);
+void printArray(int array[], int arraySize);
+void readArrayValues(int array[], int arraySize);
+void bubbleSort(int array[], int arraySize, long int *numberOfComparisons, long int *numberOfExchanges);
+void bubbleSortOptimized(int array[], int arraySize, long int *numberOfComparisons, long int *numberOfExchanges);
